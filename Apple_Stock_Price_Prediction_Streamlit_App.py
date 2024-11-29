@@ -10,7 +10,7 @@ import joblib
 st.title('Apple Stock Price Prediction')
 
 # Load the trained model
-model_lstm = load_model('lstm_model.h5')
+model_lstm = load_model('lstm_model_updated.h5')
 model = joblib.load("scaler.pkl")
 
 # Input features from the user
