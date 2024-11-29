@@ -24,11 +24,11 @@ volume = st.number_input('Volume of Stocks Traded', min_value=0, step=1, value=1
 
 # Create a dictionary for the model input
 input_data = {
-    'Close': [Close_price]
-    'Volume': [volume]
+    'Close': [Close_price],
+    'Volume': [volume],
     'Open': [open_price],
     'High': [high_price],
-    'Low': [low_price],
+    'Low': [low_price]
     
 }
 
