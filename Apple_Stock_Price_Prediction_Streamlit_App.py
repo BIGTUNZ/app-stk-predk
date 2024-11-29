@@ -3,7 +3,7 @@
 # Import necessary libraries
 import streamlit as st
 import pandas as pd
-from tensorflow.keras.models import load_model
+
 import joblib
 
 # Title for the web app
@@ -24,10 +24,12 @@ volume = st.number_input('Volume of Stocks Traded', min_value=0, step=1, value=1
 
 # Create a dictionary for the model input
 input_data = {
+    'Close': [Close_price]
+    'Volume': [volume]
     'Open': [open_price],
     'High': [high_price],
     'Low': [low_price],
-    'Volume': [volume]
+    
 }
 
 # Convert input data to dataframe
