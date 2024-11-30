@@ -51,25 +51,23 @@ st.write(input_df)
 # Prediction
 if st.button('Predict'):
     try:
-         # Add a dummy 'Close' column with a placeholder value
-        input_df['Close'] = 0
+        # Add a dummy 'Close' column with a placeholder value (if required by the scaler)
+        input_df['Close'] = 0  # Placeholder for the missing 'Close' column
 
         # Reorder columns to match the expected feature order
         input_df = input_df[['Close', 'Volume', 'Open', 'High', 'Low']]
-        
-        # Scale input data
-        scaled_data = scaler.transform(input_df)
+
+        # Ensure only the required features are used (drop 'Close')
+        input_df = input_df[['Volume', 'Open', 'High', 'Low']]
+
+        # Create a dummy sequence of 60 time steps (repeating the same input data)
+        sequence = np.tile(input_df.values, (60, 1)).reshape(1, 60, 4)
 
         # Predict using the LSTM model
-        predictions = model_lstm.predict(scaled_data)
+        predictions = model_lstm.predict(sequence)
 
-        # Post-process predictions (e.g., inverse scaling)
-        extended_predictions = np.zeros((predictions.shape[0], scaler.n_features_in_))
-        extended_predictions[:, 0] = predictions.flatten()
-        final_predictions = scaler.inverse_transform(extended_predictions)[:, 0]
-
-        # Display the predicted price
-        st.success(f"The predicted closing price of Apple stock is ${final_predictions[0]:.2f}.")
+        # Since the model predicts only the 'Close' price, display the result
+        st.success(f"The predicted closing price of Apple stock is ${predictions[0, 0]:.2f}.")
     except Exception as e:
         st.error(f"Error during prediction: {e}")
 
