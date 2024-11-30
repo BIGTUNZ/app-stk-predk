@@ -10,7 +10,6 @@ import joblib
 st.title('Apple Stock Price Prediction')
 
 # Load the trained model
-model_lstm = tf.keras.models.load_model('lstm_model.h5')
 model = joblib.load("scaler.pkl")
 
 # Input features from the user
