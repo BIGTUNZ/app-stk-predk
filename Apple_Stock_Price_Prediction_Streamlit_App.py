@@ -40,7 +40,7 @@ input_data = {
     'High': [high_price],
     'Low': [low_price]
 }
-['Close', 'Volume', 'Open', 'High', 'Low'
+
 # Convert input data to dataframe
 input_df = pd.DataFrame(input_data)
 
