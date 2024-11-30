@@ -51,6 +51,9 @@ st.write(input_df)
 # Prediction
 if st.button('Predict'):
     try:
+         # Add a dummy 'Close' column with a placeholder value
+        input_df['Close'] = 0
+        
         # Scale input data
         scaled_data = scaler.transform(input_df)
 
