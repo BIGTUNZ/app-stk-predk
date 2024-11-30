@@ -40,7 +40,7 @@ input_data = {
     'High': [high_price],
     'Low': [low_price]
 }
-
+['Close', 'Volume', 'Open', 'High', 'Low'
 # Convert input data to dataframe
 input_df = pd.DataFrame(input_data)
 
@@ -53,6 +53,9 @@ if st.button('Predict'):
     try:
          # Add a dummy 'Close' column with a placeholder value
         input_df['Close'] = 0
+
+        # Reorder columns to match the expected feature order
+        input_df = input_df[['Close', 'Volume', 'Open', 'High', 'Low']]
         
         # Scale input data
         scaled_data = scaler.transform(input_df)
