@@ -3,14 +3,26 @@
 # Import necessary libraries
 import streamlit as st
 import pandas as pd
-
+import numpy as np
+import tensorflow as tf
 import joblib
 
 # Title for the web app
 st.title('Apple Stock Price Prediction')
 
-# Load the trained model
-model = joblib.load("scaler.pkl")
+# Load the trained LSTM model
+try:
+    model_lstm = tf.keras.models.load_model("lstm_model.h5")
+    st.write("LSTM model loaded successfully!")
+except Exception as e:
+    st.error(f"Error loading LSTM model: {e}")
+
+# Load the scaler
+try:
+    scaler = joblib.load("scaler.pkl")
+    st.write("Scaler loaded successfully!")
+except Exception as e:
+    st.error(f"Error loading scaler: {e}")
 
 # Input features from the user
 st.header('Input Features')
@@ -27,7 +39,6 @@ input_data = {
     'Open': [open_price],
     'High': [high_price],
     'Low': [low_price]
-    
 }
 
 # Convert input data to dataframe
@@ -39,6 +50,20 @@ st.write(input_df)
 
 # Prediction
 if st.button('Predict'):
-    prediction = model.predict(input_df)
-    st.success(f"The predicted closing price of Apple stock is ${prediction[0]:.2f}.")
-    
+    try:
+        # Scale input data
+        scaled_data = scaler.transform(input_df)
+
+        # Predict using the LSTM model
+        predictions = model_lstm.predict(scaled_data)
+
+        # Post-process predictions (e.g., inverse scaling)
+        extended_predictions = np.zeros((predictions.shape[0], scaler.n_features_in_))
+        extended_predictions[:, 0] = predictions.flatten()
+        final_predictions = scaler.inverse_transform(extended_predictions)[:, 0]
+
+        # Display the predicted price
+        st.success(f"The predicted closing price of Apple stock is ${final_predictions[0]:.2f}.")
+    except Exception as e:
+        st.error(f"Error during prediction: {e}")
+
